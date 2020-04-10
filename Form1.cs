@@ -12,11 +12,6 @@ namespace Krypt_8
 {
     public partial class Form1 : Form
     {
-        public List<int> even = new List<int>();
-        public List<int> odd = new List<int>();
-
-
-
         public Form1()
         {
             InitializeComponent();
@@ -24,56 +19,91 @@ namespace Krypt_8
 
         private void GetResult_Click(object sender, EventArgs e)
         {
-            string name = NameBox.Text;
-            var s = StrToAsciiArray(name);
-            List<string> vs = new List<string>();
-            var d = ToBinary(vs, s);
+            string input = SendlerText.Text;
+            //input = input.Replace(" ", "");
+            byte[] AsciiInput = StrToAsciiArray(input);
+            string Numbers = GetNumbers(AsciiInput);
 
-            d = GetParitetBytes(d);
-
-            Result.Text = name + even.ToString() + "\n"+ odd.ToString();
+            string ControlSum = GetControlSum(Numbers);
 
 
-            var mas_even = even.ToArray();
-            var mas_odd = odd.ToArray();
-            var mas_d = d.ToArray();
+            ControlSumSendlerText.Text = ControlSum;
 
-            string res = "";
-            res += "| " + "Входная строка"+ " | " + "even" + " | " + "odd" + " |\n";
-
-            for (int i = 0; i < name.Length;i++)
-            {
-                res += "|      " + mas_d[i] + "       |    " +mas_even[i]+ "    |   " + mas_odd[i] + "   |\n";
-            }
-
-            Result.Text = res;
+            ReceiverText.Text = SendlerText.Text;
         }
 
         
         
-
-        private List<string> GetParitetBytes(List<string> input)
+        private string GetControlSum(string s)
         {
-            int sum = 0;
-            foreach(var s in input)
+            //считаем сумму нечетных битов
+            int Sn = 0;
+            s += " "; // чтобы добавить в конце новый символ проверки, добавляем в конце пробел
+            char[] input = s.ToCharArray();
+            //так как программируем с нуля, работаем с ними как с четными
+            for (int i = 0; i < input.Length; i++)
             {
-                s.ToCharArray();
-                for(int i=0;i<s.Length;i++)
+                if(i%2 == 0) //если символ четный, складываем с суммой нечетных
                 {
-                    sum += Convert.ToInt32(s[i].ToString());
+                    if((input[input.Length-1]==' ')&& (input[i] == ' '))
+                    {
+                        //условие, которое не считает последний пробел в общую сумму
+                        break;
+                    }
+                    Sn += input[i] - '0'; //прибавляем к сумме char с приведением его к типу int
                 }
-                even.Add(sum % 2);
-                if (sum%2 == 1)
+            }
+            //считаем сумму нечетных битов
+            int Sch = 0;
+            //так как программируем с нуля, работаем с ними как с нечетными
+            for (int i = 0; i < input.Length - 1; i++)
+            {
+                if ((i % 2 == 1))//если символ нечетный, складываем с суммой четных
                 {
-                    odd.Add(0);
-                }
-                else
-                {
-                    odd.Add(1);
+                    Sch += input[i] - '0';//прибавляем к сумме char с приведением его к типу int
                 }
             }
 
-            return input;
+            for (int i = 1; i < 10000; i++)
+            {
+                char Cd;
+                try
+                {
+                    if ((Sn + Sch + i) % 10 == 0)
+                    {
+                        Cd = Char.Parse(i.ToString());
+                        input[input.Length - 1] = Cd;
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //Исключение, которое отрабатывает, когда i в условии равно 10.
+                    //а двузначный символ в char перевести нельзя
+                    if (i == 10)
+                    {
+                        Cd = Char.Parse("1");
+                        input[input.Length - 1] = Cd;
+                        break;
+                    }
+
+                }
+
+            }
+            s = new String(input);
+
+            return s;
+        }
+        
+        private string GetNumbers(byte[] byteinput)
+        {
+            string NumbersOutput = "";
+            
+            for(int i = 0; i< byteinput.Length;i++)
+            {
+                NumbersOutput += byteinput.GetValue(i);
+            }
+            return NumbersOutput;
         }
 
         private byte[] StrToAsciiArray(string s)
@@ -81,13 +111,23 @@ namespace Krypt_8
             return Encoding.UTF8.GetBytes(s.ToCharArray());
         }
 
-        private List<string> ToBinary(List<string> input, byte[] bin_input)
+        private void CheckMessage_Click(object sender, EventArgs e)
         {
-            foreach (var s in bin_input)
+            string input = ReceiverText.Text;
+            //input = input.Replace(" ", "");
+            byte[] AsciiInput = StrToAsciiArray(input);
+            string Numbers = GetNumbers(AsciiInput);
+
+            string ControlSum = GetControlSum(Numbers);
+
+            if(ControlSum == ControlSumSendlerText.Text)
             {
-                input.Add((Convert.ToString(s, 2).PadLeft(8, '0')));
+                IsOK.Text = "Целостность не нарушена";
             }
-            return input;
+            else
+            {
+                IsOK.Text = "Целостность нарушена";
+            }
         }
     }
 
