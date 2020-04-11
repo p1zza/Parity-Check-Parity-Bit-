@@ -33,9 +33,9 @@
             this.Result = new System.Windows.Forms.Label();
             this.GetResult = new System.Windows.Forms.Button();
             this.ReceiverText = new System.Windows.Forms.TextBox();
-            this.ControlSumSendlerText = new System.Windows.Forms.Label();
             this.CheckMessage = new System.Windows.Forms.Button();
             this.IsOK = new System.Windows.Forms.Label();
+            this.ControlSumSendlerText = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // SendlerText
@@ -79,15 +79,6 @@
             this.ReceiverText.Size = new System.Drawing.Size(100, 20);
             this.ReceiverText.TabIndex = 4;
             // 
-            // ControlSumSendlerText
-            // 
-            this.ControlSumSendlerText.AutoSize = true;
-            this.ControlSumSendlerText.Location = new System.Drawing.Point(25, 91);
-            this.ControlSumSendlerText.Name = "ControlSumSendlerText";
-            this.ControlSumSendlerText.Size = new System.Drawing.Size(176, 13);
-            this.ControlSumSendlerText.TabIndex = 5;
-            this.ControlSumSendlerText.Text = "Контрольная сумма отправителя";
-            // 
             // CheckMessage
             // 
             this.CheckMessage.Location = new System.Drawing.Point(161, 145);
@@ -106,14 +97,22 @@
             this.IsOK.Size = new System.Drawing.Size(0, 13);
             this.IsOK.TabIndex = 7;
             // 
+            // ControlSumSendlerText
+            // 
+            this.ControlSumSendlerText.Location = new System.Drawing.Point(28, 91);
+            this.ControlSumSendlerText.Name = "ControlSumSendlerText";
+            this.ControlSumSendlerText.Size = new System.Drawing.Size(100, 30);
+            this.ControlSumSendlerText.TabIndex = 8;
+            this.ControlSumSendlerText.Text = "Хэш";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(248, 315);
+            this.Controls.Add(this.ControlSumSendlerText);
             this.Controls.Add(this.IsOK);
             this.Controls.Add(this.CheckMessage);
-            this.Controls.Add(this.ControlSumSendlerText);
             this.Controls.Add(this.ReceiverText);
             this.Controls.Add(this.GetResult);
             this.Controls.Add(this.Result);
@@ -133,9 +132,9 @@
         private System.Windows.Forms.Label Result;
         private System.Windows.Forms.Button GetResult;
         private System.Windows.Forms.TextBox ReceiverText;
-        private System.Windows.Forms.Label ControlSumSendlerText;
         private System.Windows.Forms.Button CheckMessage;
         private System.Windows.Forms.Label IsOK;
+        private System.Windows.Forms.RichTextBox ControlSumSendlerText;
     }
 }
 

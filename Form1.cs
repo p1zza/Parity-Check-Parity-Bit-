@@ -12,6 +12,9 @@ namespace Krypt_8
 {
     public partial class Form1 : Form
     {
+
+        public string alphabet = "АБВГДЕЁЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ" ;
+
         public Form1()
         {
             InitializeComponent();
@@ -21,13 +24,13 @@ namespace Krypt_8
         {
             string input = SendlerText.Text;
             //input = input.Replace(" ", "");
-            byte[] AsciiInput = StrToAsciiArray(input);
-            string Numbers = GetNumbers(AsciiInput);
+            string AlphabetNumbers = StrToNumArray(input);
+            //string Numbers = GetNumbers(AsciiInput);
 
-            string ControlSum = GetControlSum(Numbers);
+            string ControlSum = GetControlSum(AlphabetNumbers);
 
 
-            ControlSumSendlerText.Text = ControlSum;
+            ControlSumSendlerText.Text = "" +  ControlSum.GetHashCode();
 
             ReceiverText.Text = SendlerText.Text;
         }
@@ -95,31 +98,39 @@ namespace Krypt_8
             return s;
         }
         
-        private string GetNumbers(byte[] byteinput)
-        {
-            string NumbersOutput = "";
+        //private string GetNumbers(byte[] byteinput)
+        //{
+        //    string NumbersOutput = "";
             
-            for(int i = 0; i< byteinput.Length;i++)
-            {
-                NumbersOutput += byteinput.GetValue(i);
-            }
-            return NumbersOutput;
-        }
+        //    for(int i = 0; i< byteinput.Length;i++)
+        //    {
+        //        NumbersOutput += byteinput.GetValue(i);
+        //    }
+        //    return NumbersOutput;
+        //}
 
-        private byte[] StrToAsciiArray(string s)
+        private string StrToNumArray(string s)
         {
-            return Encoding.UTF8.GetBytes(s.ToCharArray());
+            s= s.ToUpper();
+            string output = "";
+            for(int i =0; i< s.Length; i++)
+            {
+                var array = s.ToArray();
+                output += alphabet.IndexOf(array[i]);
+            }
+            return output;
         }
 
         private void CheckMessage_Click(object sender, EventArgs e)
         {
             string input = ReceiverText.Text;
             //input = input.Replace(" ", "");
-            byte[] AsciiInput = StrToAsciiArray(input);
-            string Numbers = GetNumbers(AsciiInput);
+            //byte[] AsciiInput = StrToNumArray(input);
+            string Numbers = StrToNumArray(input);
+            //string Numbers = GetNumbers(AsciiInput);
 
             string ControlSum = GetControlSum(Numbers);
-
+            ControlSum = "" + ControlSum.GetHashCode();
             if(ControlSum == ControlSumSendlerText.Text)
             {
                 IsOK.Text = "Целостность не нарушена";
